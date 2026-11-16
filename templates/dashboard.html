@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | RecipeBox</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🍊 RecipeBox</h2>
+            <p>My Recipe Collection</p>
+        </div>
+
+        <nav class="menu">
+            <a href="/" class="active">🏠 Dashboard</a>
+           <a href="{{ url_for('semua_resep') }}">📖 Semua Resep</a>
+            <a href="{{ url_for('tambah_resep') }}">➕ Tambah Resep</a>
+            <a href="{{ url_for('pengaturan') }}">⚙️ Pengaturan</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Made with ❤️</p>
+            <small>RecipeBox App</small>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Selamat datang di RecipeBox!</p>
+            </div>
+
+            <div class="profile">
+                👩‍🍳 My Kitchen
+            </div>
+        </header>
+
+        <!-- WELCOME -->
+        <section class="welcome">
+            <div>
+                <h2>Selamat Datang di RecipeBox! 🍽️</h2>
+                <p>
+                    Simpan dan kelola semua resep favoritmu
+                    dalam satu tempat.
+                </p>
+            </div>
+            <div class="welcome-icon">🥗</div>
+        </section>
+
+        <!-- STATISTIK -->
+        <section class="cards">
+
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <p>Total Resep</p>
+                <h2>{{ total_resep }}</h2>
+                <small>Resep tersimpan</small>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🍱</div>
+                <p>Total Kategori</p>
+                <h2>{{ total_kategori }}</h2>
+                <small>Kategori tersedia</small>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">✨</div>
+                <p>Resep Terbaru</p>
+                <h2>{{ total_terbaru }}</h2>
+                <small>Resep terakhir ditambahkan</small>
+            </div>
+
+        </section>
+
+        <!-- RESEP TERBARU -->
+        <section class="content">
+
+            <div class="content-header">
+                <div>
+                    <h2>Resep Terbaru</h2>
+                    <p>Kumpulan resep yang baru kamu simpan.</p>
+                </div>
+
+                <a href="#" class="see-all">Lihat Semua</a>
+            </div>
+
+            {% if resep_terbaru %}
+
+            <div class="recipe-list">
+
+                {% for resep in resep_terbaru %}
+                <div class="recipe-item">
+
+                    <div class="recipe-photo">
+                        {% if resep[7] %}
+                            <img src="{{ url_for('static', filename='uploads/' + resep[7]) }}"
+                                 alt="{{ resep[1] }}">
+                        {% else %}
+                            🍽️
+                        {% endif %}
+                    </div>
+
+                    <div class="recipe-info">
+                        <h3>{{ resep[1] }}</h3>
+                        <p>{{ resep[2] }}</p>
+                        <small>⏱️ {{ resep[6] or 0 }} menit</small>
+                    </div>
+
+                    <span class="recipe-category">
+                        {{ resep[2] }}
+                    </span>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                <div>🍲</div>
+                <h3>Belum Ada Resep</h3>
+                <p>
+                    Koleksi resepmu masih kosong.
+                    Resep yang kamu tambahkan akan muncul di sini.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <footer class="footer">
+            <p>© 2026 RecipeBox. Your little recipe corner.</p>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

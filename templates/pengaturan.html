@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan | RecipeBox</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <span>🍳</span>
+            <h2>RecipeBox</h2>
+        </div>
+
+        <p class="menu-label">MENU UTAMA</p>
+
+        <nav>
+            <a href="{{ url_for('index') }}">🏠 Dashboard</a>
+            <a href="{{ url_for('semua_resep') }}">📖 Semua Resep</a>
+            <a href="{{ url_for('tambah_resep') }}">➕ Tambah Resep</a>
+            <a href="{{ url_for('pengaturan') }}" class="active">
+             ⚙️ Pengaturan
+            </a>
+            
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>RecipeBox</p>
+            <small>Kelola resep favoritmu</small>
+        </div>
+    </aside>
+
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Pengaturan</h1>
+                <p>Informasi dan pengaturan aplikasi RecipeBox</p>
+            </div>
+        </header>
+
+
+        <!-- INFORMASI APLIKASI -->
+        <section class="settings-card">
+            <div class="settings-icon">🍳</div>
+
+            <div class="settings-info">
+                <h2>Informasi Aplikasi</h2>
+                <p class="settings-description">
+                    Kenali aplikasi pengelola koleksi resep makanan dan minuman.
+                </p>
+
+                <div class="settings-detail">
+                    <span>Nama Aplikasi</span>
+                    <strong>RecipeBox</strong>
+                </div>
+
+                <div class="settings-detail">
+                    <span>Versi</span>
+                    <strong>1.0.0</strong>
+                </div>
+
+                <div class="settings-detail">
+                    <span>Platform</span>
+                    <strong>Web Application</strong>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- KATEGORI RESEP -->
+        <section class="settings-section">
+            <div class="section-heading">
+                <h2>📂 Kategori Resep</h2>
+                <p>Kategori yang tersedia untuk mengelompokkan resep.</p>
+            </div>
+
+            <div class="category-settings">
+                {% for item in kategori %}
+                <div class="category-setting-item">
+                    <span>
+                        {% if item == "Makanan utama" %}
+                            🍛
+                        {% elif item == "Minuman" %}
+                            🥤
+                        {% elif item == "Dessert" %}
+                            🍰
+                        {% else %}
+                            🍿
+                        {% endif %}
+                    </span>
+
+                    <strong>{{ item }}</strong>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+
+        <!-- TENTANG APLIKASI -->
+        <section class="settings-section about-card">
+            <div class="section-heading">
+                <h2>💡 Tentang RecipeBox</h2>
+            </div>
+
+            <p>
+                RecipeBox merupakan aplikasi berbasis web yang digunakan
+                untuk menyimpan dan mengelola koleksi resep makanan maupun
+                minuman secara praktis.
+            </p>
+
+            <p>
+                Pengguna dapat menambahkan resep, melihat detail resep,
+                mengedit informasi, menghapus resep, serta mencari resep
+                berdasarkan nama dan kategori.
+            </p>
+
+            <div class="about-footer">
+                <span>🍊</span>
+                <strong>RecipeBox</strong>
+                <small>Tempat menyimpan inspirasi masakanmu.</small>
+            </div>
+        </section>
+
+        <footer class="settings-footer">
+            © 2026 RecipeBox. All rights reserved.
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

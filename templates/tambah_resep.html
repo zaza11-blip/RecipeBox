@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if mode_edit %}Edit Resep{% else %}Tambah Resep{% endif %} | RecipeBox
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🍊 RecipeBox</h2>
+            <p>My Recipe Collection</p>
+        </div>
+
+        <nav class="menu">
+            <a href="{{ url_for('index') }}">🏠 Dashboard</a>
+            <a href="{{ url_for('semua_resep') }}">📖 Semua Resep</a>
+            <a href="{{ url_for('tambah_resep') }}"
+               class="{% if not mode_edit %}active{% endif %}">
+                ➕ Tambah Resep
+            </a>
+            <a href="#">⚙️ Pengaturan</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Made with ❤️</p>
+            <small>RecipeBox App</small>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="header">
+            <div>
+                <h1>
+                    {% if mode_edit %}
+                        Edit Resep
+                    {% else %}
+                        Tambah Resep
+                    {% endif %}
+                </h1>
+
+                <p>
+                    {% if mode_edit %}
+                        Perbarui informasi resep favoritmu.
+                    {% else %}
+                        Catat resep favoritmu di sini.
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="profile">
+                👩‍🍳 My Kitchen
+            </div>
+        </header>
+
+        <!-- WELCOME -->
+        <section class="welcome">
+            <div>
+                <h2>
+                    {% if mode_edit %}
+                        Perbarui Resepmu! ✏️
+                    {% else %}
+                        Bagikan Kreasi Masakanmu! 🍳
+                    {% endif %}
+                </h2>
+
+                <p>
+                    {% if mode_edit %}
+                        Ubah informasi resep sesuai keinginanmu.
+                    {% else %}
+                        Lengkapi informasi resep agar mudah
+                        ditemukan dan dibuat kembali.
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="welcome-icon">
+                {% if mode_edit %}📝{% else %}🥗{% endif %}
+            </div>
+        </section>
+
+        <!-- FORM RESEP -->
+        <section class="form-section">
+
+            <div class="form-heading">
+                <h2>Informasi Resep</h2>
+                <p>Isi formulir berikut dengan lengkap.</p>
+            </div>
+
+            {% if pesan_error %}
+            <div class="form-error">
+                {{ pesan_error }}
+            </div>
+            {% endif %}
+
+            <form action="{{ action }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                <!-- NAMA RESEP -->
+                <div class="form-group">
+                    <label for="nama_resep">Nama Resep *</label>
+
+                    <input
+                        type="text"
+                        id="nama_resep"
+                        name="nama_resep"
+                        placeholder="Contoh: Nasi Goreng Spesial"
+                        value="{{ form_data.get('nama_resep', resep[1] if mode_edit else '') }}"
+                        required
+                    >
+                </div>
+
+                <!-- KATEGORI -->
+                <div class="form-group">
+                    <label for="kategori">Kategori *</label>
+
+                    <select id="kategori" name="kategori" required>
+                        <option value="">Pilih kategori</option>
+
+                        {% for item in kategori %}
+                        <option value="{{ item }}"
+                            {% if form_data.get('kategori', resep[2] if mode_edit else '') == item %}
+                                selected
+                            {% endif %}>
+                            {{ item }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- DESKRIPSI -->
+                <div class="form-group">
+                    <label for="deskripsi">Deskripsi Resep</label>
+
+                    <textarea
+                        id="deskripsi"
+                        name="deskripsi"
+                        rows="3"
+                        placeholder="Ceritakan sedikit tentang resep ini..."
+                    >{{ form_data.get('deskripsi', resep[3] if mode_edit else '') }}</textarea>
+                </div>
+
+                <!-- BAHAN -->
+                <div class="form-group">
+                    <label for="bahan">Bahan-bahan *</label>
+
+                    <textarea
+                        id="bahan"
+                        name="bahan"
+                        rows="6"
+                        placeholder="Contoh:
+1. 2 piring nasi putih
+2. 2 butir telur
+3. 2 siung bawang putih
+4. Kecap secukupnya"
+                        required
+                    >{{ form_data.get('bahan', resep[4] if mode_edit else '') }}</textarea>
+
+                    <small>Tulis setiap bahan pada baris baru.</small>
+                </div>
+
+                <!-- LANGKAH -->
+                <div class="form-group">
+                    <label for="langkah">Langkah Memasak *</label>
+
+                    <textarea
+                        id="langkah"
+                        name="langkah"
+                        rows="7"
+                        placeholder="Contoh:
+1. Panaskan minyak.
+2. Tumis bawang hingga harum.
+3. Masukkan telur dan nasi.
+4. Tambahkan bumbu, lalu aduk rata."
+                        required
+                    >{{ form_data.get('langkah', resep[5] if mode_edit else '') }}</textarea>
+
+                    <small>Tulis langkah memasak secara berurutan.</small>
+                </div>
+
+                <!-- WAKTU MEMASAK -->
+                <div class="form-group">
+                    <label for="waktu_masak">Waktu Memasak (menit) *</label>
+
+                    <input
+                        type="number"
+                        id="waktu_masak"
+                        name="waktu_masak"
+                        min="1"
+                        placeholder="Contoh: 30"
+                        value="{{ form_data.get('waktu_masak', resep[6] if mode_edit else '') }}"
+                        required
+                    >
+                </div>
+
+                <!-- FOTO -->
+                <div class="form-group">
+                    <label for="foto">Foto Resep</label>
+
+                    {% if mode_edit and resep[7] %}
+                        <p>Foto saat ini:</p>
+
+                        <img
+                            src="{{ url_for('static', filename='uploads/' + resep[7]) }}"
+                            alt="{{ resep[1] }}"
+                            class="edit-photo-preview"
+                        >
+                    {% endif %}
+
+                    <input
+                        type="file"
+                        id="foto"
+                        name="foto"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                    <small>
+                        {% if mode_edit %}
+                            Kosongkan jika tidak ingin mengganti foto.
+                        {% else %}
+                            Format JPG, JPEG, PNG, atau WEBP. Foto bersifat opsional.
+                        {% endif %}
+                    </small>
+                </div>
+
+                <!-- TOMBOL -->
+                <div class="form-actions">
+
+                    {% if mode_edit %}
+                        <a href="{{ url_for('detail_resep', id=resep[0]) }}"
+                           class="cancel-button">
+                            Batal
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('semua_resep') }}"
+                           class="cancel-button">
+                            Batal
+                        </a>
+                    {% endif %}
+
+                    <button type="submit" class="save-button">
+                        {% if mode_edit %}
+                            ✏️ Simpan Perubahan
+                        {% else %}
+                            💾 Simpan Resep
+                        {% endif %}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <footer class="footer">
+            <p>© 2026 RecipeBox. Your little recipe corner.</p>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

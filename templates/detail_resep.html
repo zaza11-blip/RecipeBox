@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Resep | RecipeBox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="logo">🍊 RecipeBox</div>
+
+        <nav class="menu">
+            <a href="{{ url_for('index') }}">🏠 Dashboard</a>
+            <a href="{{ url_for('semua_resep') }}">📖 Semua Resep</a>
+            <a href="{{ url_for('tambah_resep') }}">➕ Tambah Resep</a>
+        </nav>
+
+        <div class="profile">
+            <div class="profile-icon">👩‍🍳</div>
+            <div>
+                <strong>RecipeBox</strong>
+                <small>Koleksi Resep</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="header">
+            <div>
+                <h2>Detail Resep</h2>
+                <p>Lihat informasi lengkap resep pilihanmu.</p>
+            </div>
+        </header>
+
+        <section class="detail-container">
+
+            <div class="detail-image">
+                {% if resep[7] %}
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + resep[7]) }}"
+                        alt="{{ resep[1] }}"
+                    >
+                {% else %}
+                    <div class="detail-no-image">🍽️</div>
+                {% endif %}
+            </div>
+
+            <div class="detail-content">
+
+                <span class="detail-category">{{ resep[2] }}</span>
+
+                <h1>{{ resep[1] }}</h1>
+
+                <p class="detail-description">
+                    {{ resep[3] if resep[3] else 'Belum ada deskripsi resep.' }}
+                </p>
+
+                <div class="detail-time">
+                    ⏱️ Waktu memasak: {{ resep[6] }} menit
+                </div>
+
+                <div class="detail-section">
+                    <h3>🥕 Bahan-bahan</h3>
+                    <p>{{ resep[4] }}</p>
+                </div>
+
+                <div class="detail-section">
+                    <h3>👩‍🍳 Langkah-langkah</h3>
+                    <p>{{ resep[5] }}</p>
+                </div>
+
+                <div class="detail-actions">
+                    <a
+                        href="{{ url_for('edit_resep', id=resep[0]) }}"
+                        class="save-button"
+                    >
+                        ✏️ Edit Resep
+                    </a>
+
+                    <form
+                        action="{{ url_for('hapus_resep', id=resep[0]) }}"
+                        method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus resep ini?')"
+                    >
+                        <button type="submit" class="delete-button">
+                            🗑️ Hapus Resep
+                        </button>
+                    </form>
+
+                    <a href="{{ url_for('semua_resep') }}" class="cancel-button">
+                        ← Kembali
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

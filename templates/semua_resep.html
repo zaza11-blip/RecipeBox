@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semua Resep | RecipeBox</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🍊 RecipeBox</h2>
+            <p>My Recipe Collection</p>
+        </div>
+
+        <nav class="menu">
+            <a href="{{ url_for('index') }}">🏠 Dashboard</a>
+            <a href="{{ url_for('semua_resep') }}" class="active">📖 Semua Resep</a>
+            <a href="{{ url_for('tambah_resep') }}">➕ Tambah Resep</a>
+            <a href="#">⚙️ Pengaturan</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Made with ❤️</p>
+            <small>RecipeBox App</small>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="header">
+            <div>
+                <h1>Semua Resep</h1>
+                <p>Jelajahi koleksi resep favoritmu.</p>
+            </div>
+
+            <div class="profile">
+                👩‍🍳 My Kitchen
+            </div>
+        </header>
+
+        <!-- JUDUL HALAMAN -->
+        <section class="welcome">
+            <div>
+                <h2>Temukan Resep Favoritmu! 🍽️</h2>
+                <p>
+                    Semua inspirasi masakan dan minuman
+                    tersimpan di sini.
+                </p>
+            </div>
+            <div class="welcome-icon">🥘</div>
+        </section>
+
+        <!-- PENCARIAN DAN FILTER -->
+        <section class="recipe-tools">
+
+            <form action="{{ url_for('semua_resep') }}" method="GET">
+
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Cari nama resep..."
+                    value="{{ pencarian }}"
+                >
+
+                <select name="kategori">
+                    <option value="">Semua Kategori</option>
+
+                    {% for item in kategori %}
+                    <option value="{{ item }}"
+                        {% if kategori_pilihan == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Cari Resep</button>
+
+                <a href="{{ url_for('semua_resep') }}"
+                   class="reset-button">
+                    Reset
+                </a>
+
+            </form>
+
+        </section>
+
+        <!-- DAFTAR RESEP -->
+        <section class="content">
+
+            <div class="content-header">
+                <div>
+                    <h2>Koleksi Resep</h2>
+                    <p>{{ daftar_resep|length }} resep ditemukan</p>
+                </div>
+            </div>
+
+            {% if daftar_resep %}
+
+            <div class="recipe-grid">
+
+                {% for resep in daftar_resep %}
+
+                <div class="recipe-card">
+
+                    <div class="recipe-card-image">
+                        {% if resep[7] %}
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + resep[7]) }}"
+                                alt="{{ resep[1] }}"
+                            >
+                        {% else %}
+                            <span>🍽️</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="recipe-card-info">
+
+                        <span class="recipe-category">
+                            {{ resep[2] }}
+                        </span>
+
+                        <h3>{{ resep[1] }}</h3>
+
+                        <p>
+                            {{ resep[3] or 'Belum ada deskripsi resep.' }}
+                        </p>
+
+                        <div class="recipe-card-footer">
+                            <span>⏱️ {{ resep[6] or 0 }} menit</span>
+
+                            <a
+                                href="{{ url_for('detail_resep', id=resep[0]) }}"
+                                class="recipe-detail-link"
+                            >
+                                Lihat Detail →
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                <div>🔎</div>
+                <h3>Resep Belum Ditemukan</h3>
+                <p>
+                    {% if pencarian or kategori_pilihan %}
+                        Coba gunakan kata pencarian atau kategori lain.
+                    {% else %}
+                        Belum ada resep yang tersimpan.
+                        Resep yang kamu tambahkan nanti akan muncul di sini.
+                    {% endif %}
+                </p>
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <footer class="footer">
+            <p>© 2026 RecipeBox. Your little recipe corner.</p>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
